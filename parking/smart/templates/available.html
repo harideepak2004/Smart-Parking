@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/available.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo"> Smart Parking
+    </div>
+    <ul id="navLinks">
+        <li><a href="{% url 'home' %}">Home</a></li>
+    </ul>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<section class="hero">
+    <h1>Choose your available Parking Slots</h1>
+    <p>View real-time availability and company details.</p>
+
+    <div id="companyDetails">
+        <h2>Company Details</h2>
+        <p><strong>Name:</strong> <span id="companyName"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Address:</strong> <span id="address"></span></p>
+    </div>
+
+    <div id="parkingContainer"></div>
+
+    <!-- Undo button -->
+    <div style="text-align:center; margin:20px;">
+        <button id="undoBtn">Undo All Disabled Slots</button>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Smart Parking. All rights reserved.
+</footer>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+
+window.onload = function() {
+    // Load company data
+    const companyName = localStorage.getItem("companyName") || "N/A";
+    const email = localStorage.getItem("email") || "N/A";
+    const phone = localStorage.getItem("phone") || "N/A";
+    const address = localStorage.getItem("address") || "N/A";
+    const floors = parseInt(localStorage.getItem("floors")) || 0;
+    const slots = parseInt(localStorage.getItem("slots")) || 0;
+
+    document.getElementById("companyName").innerText = companyName;
+    document.getElementById("email").innerText = email;
+    document.getElementById("phone").innerText = phone;
+    document.getElementById("address").innerText = address;
+
+    renderSlots(floors, slots);
+};
+
+// Function to render parking slots
+function renderSlots(floors, slots) {
+    const container = document.getElementById("parkingContainer");
+    container.innerHTML = '';
+
+    let disabled = JSON.parse(localStorage.getItem("disabledSlots") || "[]");
+
+    let floorCount = 1;
+    const rows = floors > 8 ? 3 : floors > 5 ? 2 : 1;
+    const floorsPerRow = Math.ceil(floors / rows);
+
+    for (let r = 0; r < rows; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'floor-row';
+
+        for (let i = 0; i < floorsPerRow && floorCount <= floors; i++, floorCount++) {
+            const floorDiv = document.createElement('div');
+            floorDiv.className = 'floor-block';
+
+            const floorTitle = document.createElement('h3');
+            floorTitle.innerText = `Floor ${floorCount}`;
+            floorDiv.appendChild(floorTitle);
+
+            const slotContainer = document.createElement('div');
+            slotContainer.className = 'floor-slots';
+
+            for (let s = 1; s <= slots; s++) {
+                const slotId = `F${floorCount}-S${s}`;
+                const div = document.createElement('div');
+                div.className = 'circle';
+                div.innerText = `S${s}`;
+
+                // Disable if previously selected
+                if (disabled.includes(slotId)) {
+                    div.style.backgroundColor = 'gray';
+                    div.style.pointerEvents = 'none';
+                }
+
+                div.dataset.floor = floorCount;
+                div.dataset.slot = s;
+
+                div.addEventListener('click', function() {
+                    const chosenSlot = slotId;
+                    console.log("Selected slot:", chosenSlot);
+
+                    // Store chosen slot in localStorage
+                    localStorage.setItem("chosenSlot", chosenSlot);
+
+                    // Add to disabled slots
+                    disabled.push(chosenSlot);
+                    localStorage.setItem("disabledSlots", JSON.stringify(disabled));
+
+                    // Redirect to user registration page
+                    window.location.href = "/user/";
+                });
+
+                slotContainer.appendChild(div);
+            }
+
+            floorDiv.appendChild(slotContainer);
+            rowDiv.appendChild(floorDiv);
+        }
+
+        container.appendChild(rowDiv);
+    }
+}
+
+// Undo button to clear all disabled slots
+document.getElementById('undoBtn').addEventListener('click', function() {
+    localStorage.removeItem("disabledSlots");
+    const floors = parseInt(localStorage.getItem("floors")) || 0;
+    const slots = parseInt(localStorage.getItem("slots")) || 0;
+    renderSlots(floors, slots); // re-render all slots as available
+});
+</script>
+<style>
+/* Undo All Disabled Slots Button */
+#undoBtn {
+    padding: 10px 20px;
+    background-color: #004aad;   /* primary blue */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s, transform 0.2s;
+    margin: 20px auto;
+    display: block;
+}
+
+#undoBtn:hover {
+    background-color: #0066ff;   /* lighter blue on hover */
+    transform: scale(1.05);      /* subtle zoom effect */
+}
+
+#undoBtn:active {
+    transform: scale(0.98);      /* button press effect */
+}
+
+</style>
+</body>
+</html>

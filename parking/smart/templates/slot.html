@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/slot.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
+        Smart Parking
+    </div>
+    <ul id="navLinks">
+        <li><a href="{% url 'home' %}">Home</a></li>
+    </ul>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<!-- HERO / SLOT SECTION -->
+<section class="hero">
+    <h1>Your Chosen Parking Slot</h1>
+    <p>Park your vehicle safely at the selected slot.</p>
+
+    <!-- Company Details -->
+    <div id="companyDetails">
+        <h2>Company Details</h2>
+        <p><strong>Name:</strong> <span id="companyName"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Address:</strong> <span id="address"></span></p>
+    </div>
+
+    <!-- Chosen Slot -->
+    <div id="chosenSlotContainer">
+        <h2>Slot Information</h2>
+        <div class="circle" id="chosenSlot"></div>
+        <p class="thank">Thank You for choosing this slot!</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    &copy; 2025 Smart Parking. All rights reserved.
+</footer>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+
+window.onload = function() {
+    // Load company info from localStorage
+    const companyName = localStorage.getItem("companyName") || "N/A";
+    const email       = localStorage.getItem("email") || "N/A";
+    const phone       = localStorage.getItem("phone") || "N/A";
+    const address     = localStorage.getItem("address") || "N/A";
+
+    document.getElementById("companyName").innerText = companyName;
+    document.getElementById("email").innerText = email;
+    document.getElementById("phone").innerText = phone;
+    document.getElementById("address").innerText = address;
+
+    // Load chosen slot
+    const chosenSlot = localStorage.getItem("chosenSlot") || "N/A";
+    document.getElementById("chosenSlot").innerText = chosenSlot;
+};
+</script>
+
+</body>
+</html>

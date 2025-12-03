@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
+        Smart Parking
+    </div>
+    <ul id="navLinks">
+        <li><a href="{% url 'home' %}">Home</a></li>
+    </ul>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<!-- MAIN FORM -->
+<main>
+    <form id="companyForm" onsubmit="saveAndGo(event)">
+        <h2>Enter Company & Parking Details</h2>
+
+        <!-- Company Details -->
+        <label for="name">Company Name</label>
+        <input type="text" id="name" placeholder="Enter company name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter email" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="Enter phone number" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" rows="3" placeholder="Enter address" required></textarea>
+
+        <!-- Parking Details -->
+        <label for="floors">Number of Floors</label>
+        <select id="floors" required>
+            <option value="">Select Floors</option>
+            {% for f in floors %}
+                <option value="{{ f }}">{{ f }} Floor{% if f > 1 %}s{% endif %}</option>
+            {% endfor %}
+        </select>
+
+        <label for="slots">Slots per Floor</label>
+        <select id="slots" required>
+            <option value="">Select Slots</option>
+            {% for s in slots %}
+                <option value="{{ s }}">{{ s }} Slot{% if s > 1 %}s{% endif %}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Generate QR</button>
+    </form>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    &copy; 2025 Smart Parking. All rights reserved.
+</footer>
+
+<script>
+function toggleMenu(){
+    document.getElementById("navLinks").classList.toggle("show");
+}
+
+// Save all data to localStorage and navigate to QR page
+function saveAndGo(event) {
+    event.preventDefault();
+
+    const name    = document.getElementById("name").value;
+    const email   = document.getElementById("email").value;
+    const phone   = document.getElementById("phone").value;
+    const address = document.getElementById("address").value;
+    const floors  = document.getElementById("floors").value;
+    const slots   = document.getElementById("slots").value;
+
+    if(!name || !email || !phone || !address || !floors || !slots){
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    localStorage.setItem("companyName", name);
+    localStorage.setItem("email", email);
+    localStorage.setItem("phone", phone);
+    localStorage.setItem("address", address);
+    localStorage.setItem("floors", floors);
+    localStorage.setItem("slots", slots);
+
+    // Go to QR page
+    window.location.href = "{% url 'qr' %}";
+}
+</script>
+
+</body>
+</html>

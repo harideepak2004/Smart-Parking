@@ -1,0 +1,190 @@
+/* -------------------- BASE -------------------- */
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------- NAVBAR -------------------- */
+nav {
+    width: 100%;
+    background: #0077ff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    border-bottom: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+nav .logo {
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    height: 35px;
+    margin-right: 10px;
+}
+
+nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin-right: 40px;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-icon {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* -------------------- HERO SECTION -------------------- */
+.hero {
+    flex: 1;
+    margin-top: 100px;
+    padding: 50px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #0077ff, #00c6ff);
+    color: white;
+}
+
+/* Company Details Box */
+#companyDetails {
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    padding: 20px 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+#companyDetails h2 {
+    margin-bottom: 15px;
+    color: #0077ff;
+}
+
+#companyDetails p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+/* Chosen Slot Box */
+#chosenSlotContainer {
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    padding: 20px 30px;
+    border-radius: 10px;
+    max-width: 300px;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#chosenSlotContainer h2 {
+    margin-bottom: 15px;
+    color: #0077ff;
+}
+
+#chosenSlotContainer .circle {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+    background: #0077ff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+}
+
+#chosenSlotContainer .circle:hover {
+    background: #005ecb;
+    transform: scale(1.1);
+}
+
+#chosenSlotContainer .thank {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* -------------------- FOOTER -------------------- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #0077ff;
+    color: white;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        display: none;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul.show {
+        display: flex;
+    }
+
+    nav ul li a {
+        padding: 12px 0;
+        font-size: 18px;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    #chosenSlotContainer .circle {
+        width: 70px;
+        height: 70px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #chosenSlotContainer .circle {
+        width: 60px;
+        height: 60px;
+        font-size: 18px;
+    }
+}

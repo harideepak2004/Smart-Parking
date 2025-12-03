@@ -1,0 +1,109 @@
+{% load static %}  <!-- Load static files in Django -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
+        Smart Parking
+    </div>
+    <ul id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#contact">Contact</a></li>
+                {% if user.is_authenticated %}
+        <li id="hello">Hello {{user.first_name}}</li>
+        <li><a href="{% url 'logout' %}">logout</a></li>
+        {% else %}
+        <li><a href="{% url 'register' %}">Register</a></li>
+        <li><a href="{% url 'login' %}">login</a></li>
+        {% endif %}
+    </ul>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+    <h1>Welcome to Smart Parking</h1>
+    <p>
+        Provide your company details to generate a QR code.<br><br>
+        Place it in your parking area so users can scan and see available slots in real-time.
+    </p>
+    {% if user.is_authenticated %}
+        <h2>Hello {{ user.first_name }}</h2>
+    {% else %}
+        <button onclick="window.location.href='{% url 'login' %}'">Login</button>
+    {% endif %}
+</section>
+
+<!-- QR Generator Section -->
+<section id="qr-generator">
+    <div class="container">
+        <div class="card">
+            <h3>Easy QR Generation</h3>
+            <p>Enter your company details and instantly generate a QR code to place in your parking lot.</p>
+            <button onclick="navigate('{% url 'detail' %}')" style="margin-top:15px; padding:12px 25px; font-size:1rem; border:none; border-radius:6px; background:#0077ff; color:white; cursor:pointer;">Generate QR</button>
+            <button onclick="navigate('{% url 'qr' %}')" style="margin-top:15px; padding:12px 25px; font-size:1rem; border:none; border-radius:6px; background:#0077ff; color:white; cursor:pointer;">Show QR</button>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features">
+    <div class="container">
+        <div class="card">
+            <h3>Track Slots</h3>
+            <p>To view real-time availability of parking slots.</p>
+            <button onclick="navigate('{% url 'available' %}')" style="margin-top:15px; padding:12px 25px; font-size:1rem; border:none; border-radius:6px; background:#0077ff; color:white; cursor:pointer;">Available Slots</button>
+
+        </div>
+        <div class="card">
+            <h3>Checkout Process</h3>
+            <p>To view the total duration a vehicle has spent in the parking area.</p>
+            <button onclick="navigate('{% url 'outpass' %}')" style="margin-top:15px; padding:12px 25px; font-size:1rem; border:none; border-radius:6px; background:#0077ff; color:white; cursor:pointer;">Checkout Process</button>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+    <div class="container">
+        <div class="card">
+            <h3>Contact Us</h3>
+            <p>Email: harideepak.s10@gmail.com</p>
+            <p>Phone: +91 8056867639</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Smart Parking. All rights reserved.
+</footer>
+
+<script>
+    function toggleMenu(){
+        document.getElementById("navLinks").classList.toggle("show");
+    }
+
+    // Navigation handler with login check
+    function navigate(url){
+        {% if user.is_authenticated %}
+            window.location.href = url;  // user is logged in → go to page
+        {% else %}
+            window.location.href = "{% url 'login' %}";  // not logged in → go to login
+        {% endif %}
+    }
+
+</script>
+
+</body>
+</html>

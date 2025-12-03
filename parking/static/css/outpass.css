@@ -1,0 +1,148 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body & container */
+body {
+    background-color: #f0f2f5;
+    color: #333;
+}
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #0077ff; /* new color */
+    color: white;
+    padding: 20px;
+
+}
+.sidebar h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2563eb; 
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #1d4ed8; /* original hover color */
+}
+
+#search {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+.main-content h1 {
+    margin-bottom: 15px;
+    font-size: 28px;
+    color: #007BFF;
+}
+.main-content p {
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+/* User details box */
+#user-details {
+    display: flex;
+    justify-content: center;
+}
+.box-container {
+    background-color: #007BFF;
+    color: white;
+    border-radius: 10px;
+    padding: 25px 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.5s ease;
+}
+.box-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+.box-container p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+/* Remove button */
+.remove-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+.remove-btn:hover {
+    background-color: #b91c1c;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #007BFF;
+    color: white;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+    .main-content {
+        padding: 20px;
+    }
+}
+

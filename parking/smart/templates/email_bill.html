@@ -1,0 +1,17 @@
+<html>
+  <body>
+    <h2>Smart Parking Bill</h2>
+    <p>Hello {{ user.name }},</p>
+    <p>Your parking bill details:</p>
+    <ul>
+      <li>Car Number: {{ user.car_number }}</li>
+      <li>Slot: {{ user.slot }}</li>
+      <li>Login Time: {{ user.login_time }}</li>
+      <li>Logout Time: {{ user.logout_time }}</li>
+      <li>Total Duration: {{ duration_hours }} Hours</li>
+      <li>Price per Hour: Rs. {{ price_per_hour }}</li>
+      <li>Total Amount: Rs. {{ total_amount }}</li>
+    </ul>
+    <p>Thank you for using Smart Parking.</p>
+  </body>
+</html>

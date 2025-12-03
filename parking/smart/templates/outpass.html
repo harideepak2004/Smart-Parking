@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Parking</title>
+<link rel="stylesheet" href="{% static 'css/outpass.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+<aside class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+        <li><button onclick="location.href='{% url 'home' %}'">Home</button></li>
+    </ul>
+
+    <h2>Search Cars</h2>
+    <input type="text" id="search" placeholder="Search by Car Number">
+
+    <ul id="item-list">
+        {% for user in users %}
+        <li>
+            <button class="user-btn" data-userid="{{ user.id }}" data-slot="{{ user.slot }}" onclick="showUser({{ user.id }})">
+                {{ user.car_number }}
+            </button>
+        </li>
+        {% empty %}
+        <li>No registered users</li>
+        {% endfor %}
+    </ul>
+</aside>
+
+<main class="main-content" style="margin-left:0px; padding:20px;">
+    <h1>Out Pass</h1>
+    <p>Select a car to view details and manage slot.</p>
+
+    <div id="user-details">
+        <p>Select a user from the sidebar to view details.</p>
+    </div>
+</main>
+
+</div>
+
+<footer>
+&copy; 2025 Smart Parking
+</footer>
+
+<script>
+const searchInput = document.getElementById('search');
+const userList = document.getElementById('item-list');
+
+let removedUsers = JSON.parse(localStorage.getItem("removedUsers") || "[]");
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#item-list button').forEach(btn => {
+        if (removedUsers.includes(btn.dataset.userid)) {
+            btn.parentElement.remove();
+        }
+    });
+});
+
+// Search Filter
+searchInput.addEventListener('keyup', () => {
+    const filter = searchInput.value.toLowerCase();
+    userList.querySelectorAll('li').forEach(li => {
+        const btn = li.querySelector('button');
+        if (!btn) return;
+        li.style.display = btn.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    });
+});
+
+
+// Load User Details
+function showUser(userId){
+    fetch(`/user-details/${userId}/`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('user-details').innerHTML = `
+            <div class="box-container">
+                <h2>User Details</h2>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Car Number:</strong> ${data.car_number}</p>
+                <p><strong>Email:</strong> ${data.email}</p>
+                <p><strong>Phone:</strong> ${data.phone}</p>
+                <p><strong>Slot:</strong> ${data.slot}</p>
+                <p><strong>Login Time:</strong> ${data.login_time}</p>
+                <p><strong>Logout Time:</strong> ${data.logout_time}</p>
+                <p><strong>Status:</strong> ${data.is_active ? 'Active' : 'Inactive'}</p>
+
+                <button class="remove-btn" onclick="removeFromList(${data.id}, '${data.slot}')">Generate Bill & Remove</button>
+            </div>
+        `;
+    });
+}
+
+
+// Logout + Billing
+function removeFromList(userId, slotId){
+
+    fetch(`/logout-user/${userId}/`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('user-details').innerHTML = `
+                <div class="box-container">
+                    <h2>Parking Bill</h2>
+                    <p><strong>Logout Time:</strong> ${data.logout_time}</p>
+                    <p><strong>Total Duration:</strong> ${data.duration_hours} Hours</p>
+                    <p><strong>Price Per Hour:</strong> Rs. ${data.price_per_hour}</p>
+                    <p><strong>Total Amount:</strong> <strong>Rs. ${data.total_amount}</strong></p>
+
+                    <button class="ok-btn" onclick="location.reload()">OK</button>
+                </div>
+            `;
+        });
+
+    // Remove user from local storage + UI
+    removedUsers.push(userId.toString());
+    localStorage.setItem("removedUsers", JSON.stringify(removedUsers));
+
+    const btn = userList.querySelector(`button[data-userid='${userId}']`);
+    if (btn) btn.parentElement.remove();
+
+    // Release slot
+    let disabled = JSON.parse(localStorage.getItem("disabledSlots") || "[]");
+    disabled = disabled.filter(s => s !== slotId);
+    localStorage.setItem("disabledSlots", JSON.stringify(disabled));
+}
+</script>
+<style>
+.ok-btn {
+    padding: 10px 25px;
+    background-color: #28a745; /* green */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ok-btn:hover {
+    background-color: #218838; /* darker green on hover */
+}
+
+</style>
+</body>
+</html>

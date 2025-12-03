@@ -1,0 +1,102 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking</title>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/qr.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo"> Smart Parking
+    </div>
+    <ul id="navLinks">
+        <li><a href="{% url 'home' %}">Home</a></li>
+    </ul>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>Scan Your Smart Parking QR</h1>
+    <p>Place this QR code in your parking area so users can scan and see available slots instantly.</p>
+</section>
+
+<!-- QR BOX -->
+<div class="qr-box">
+    <h2>Your QR Code</h2>
+    <canvas id="qrCanvas"></canvas>
+    <button onclick="downloadQR()">Download QR</button>
+    <button onclick="goToAvailable()">Available Slots</button>
+
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    &copy; 2025 Smart Parking. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+
+
+<script>
+function toggleMenu(){
+    document.getElementById("navLinks").classList.toggle("show");
+}
+
+window.onload = function() {
+    const companyName = localStorage.getItem("companyName");
+    const email       = localStorage.getItem("email");
+    const phone       = localStorage.getItem("phone");
+    const address     = localStorage.getItem("address");
+    const floors      = localStorage.getItem("floors");
+    const slots       = localStorage.getItem("slots");
+
+    // Build URL to user page with query params
+    const userURL = `${window.location.origin}/user/?companyName=${encodeURIComponent(companyName)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&floors=${floors}&slots=${slots}`;
+
+    // Generate QR code
+    const qr = new QRious({
+        element: document.getElementById("qrCanvas"),
+        value: userURL,
+        size: 250
+    });
+
+    // Download QR
+    window.downloadQR = function() {
+        const canvas = document.getElementById("qrCanvas");
+        const link = document.createElement("a");
+        link.download = "SmartParkingQR.png";
+        link.href = canvas.toDataURL();
+        link.click();
+    };
+};
+
+// Redirect QR
+function goToAvailablePage() {
+    const companyName = localStorage.getItem("companyName");
+    const email       = localStorage.getItem("email");
+    const phone       = localStorage.getItem("phone");
+    const address     = localStorage.getItem("address");
+    const floors      = localStorage.getItem("floors");
+    const slots       = localStorage.getItem("slots");
+
+    window.location.href = `/available/?companyName=${encodeURIComponent(companyName)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&floors=${floors}&slots=${slots}`;
+}
+
+
+function goToAvailable() {
+    window.location.href = window.location.origin + "/available/";
+}
+</script>
+
+
+</body>
+</html>
